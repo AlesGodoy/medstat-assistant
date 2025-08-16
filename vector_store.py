@@ -35,8 +35,15 @@ def get_embedding(text):
     return np.array(response.data[0].embedding)
 
 def process_pdf(file_path):
-    with pdfplumber.open(file_path) as pdf:
-        text = "".join(page.extract_text() for page in pdf.pages if page.extract_text())
+    text = ""
+    try:
+        with pdfplumber.open(file_path) as pdf:
+            for page in pdf.pages:
+                page_text = page.extract_text(x_density=1, y_density=1)
+                if page_text:
+                    text += page_text + "\n"
+    except Exception as e:
+        print(f"Error procesando el archivo PDF {file_path}: {e}")
     return text
 
 def process_docx(file_path):
