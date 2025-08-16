@@ -10,4 +10,4 @@ __pycache__/
 .idea/
 
 # Local data (no subir los documentos originales)
-documentos/
+#documentos/
