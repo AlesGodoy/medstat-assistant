@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+
+# IDE configuration
+.vscode/
+.idea/
+
+# Local data (no subir los documentos originales)
+documentos/
