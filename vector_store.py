@@ -10,8 +10,14 @@ load_dotenv()
 # La API key se configura automáticamente al inicializar el cliente
 client = openai.OpenAI() 
 
-INDEX_PATH = "chatbot.index"
-TEXTS_PATH = "texts.pkl"
+# Define la ruta de la carpeta persistente
+PERSISTENT_DIR = "/data/index"
+INDEX_PATH = os.path.join(PERSISTENT_DIR, "chatbot.index")
+TEXTS_PATH = os.path.join(PERSISTENT_DIR, "texts.pkl")
+
+# Se asegura de que el directorio exista al iniciar
+os.makedirs(PERSISTENT_DIR, exist_ok=True)
+
 texts = []
 metadatas = []
 

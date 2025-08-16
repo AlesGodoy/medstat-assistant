@@ -1,7 +1,7 @@
 import os
 import faiss
 import pickle
-from vector_store import add_document_to_index, texts, index
+from vector_store import add_document_to_index, texts, index, INDEX_PATH, TEXTS_PATH
 
 # Carpeta donde están los documentos
 # Puedes cambiar este nombre si usas otra carpeta
@@ -19,9 +19,9 @@ else:
         add_document_to_index(os.path.join(doc_folder, doc))
 
     if texts:
-        faiss.write_index(index, "chatbot.index")
-        with open("texts.pkl", "wb") as f:
+        faiss.write_index(index, INDEX_PATH)
+        with open(TEXTS_PATH, "wb") as f:
             pickle.dump(texts, f)
-        print("\n✅ Índice FAISS y textos guardados correctamente.")
+        print("\n✅ Índice FAISS y textos guardados correctamente en el disco persistente.")
     else:
         print("No se añadieron textos al índice.")
