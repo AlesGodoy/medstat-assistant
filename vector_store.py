@@ -5,17 +5,15 @@ import faiss
 import numpy as np
 import pickle
 from dotenv import load_dotenv
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 load_dotenv()
-# La API key se configura automáticamente al inicializar el cliente
-client = openai.OpenAI() 
+client = openai.OpenAI()
 
-# Define la ruta de la carpeta persistente
 PERSISTENT_DIR = "/data/index"
 INDEX_PATH = os.path.join(PERSISTENT_DIR, "chatbot.index")
 TEXTS_PATH = os.path.join(PERSISTENT_DIR, "texts.pkl")
 
-# Se asegura de que el directorio exista al iniciar
 os.makedirs(PERSISTENT_DIR, exist_ok=True)
 
 texts = []
@@ -63,7 +61,14 @@ def add_document_to_index(path):
         content = process_docx(path)
     else:
         return
-    chunks = [content[i:i+1000] for i in range(0, len(content), 1000)]
+
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000,
+        chunk_overlap=200,
+        length_function=len,
+    )
+    chunks = text_splitter.split_text(content)
+
     for chunk in chunks:
         if chunk.strip():
             emb = get_embedding(chunk)
@@ -76,5 +81,5 @@ def search_similar_chunks(query):
         return ["No hay documentos cargados en la base de datos de vectores."]
     
     emb = get_embedding(query).astype("float32")
-    D, I = index.search(np.array([emb]), k=3)
+    D, I = index.search(np.array([emb]), k=5) 
     return [texts[i] for i in I[0]]
