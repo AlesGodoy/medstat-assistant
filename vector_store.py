@@ -63,8 +63,8 @@ def add_document_to_index(path):
         return
 
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=200,
+        chunk_size=100000,
+        chunk_overlap=2000,
         length_function=len,
     )
     chunks = text_splitter.split_text(content)
